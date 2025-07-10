@@ -7,9 +7,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
+import { useState } from "react";
 
 const Index = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("all");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   const featuredGames = [
     {
       id: 1,
@@ -61,14 +75,27 @@ const Index = () => {
     },
   ];
 
+  const filteredGames = featuredGames.filter((game) => {
+    const matchesSearch =
+      game.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      game.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesGenre =
+      selectedGenre === "all" || game.genre.toLowerCase() === selectedGenre;
+    return matchesSearch && matchesGenre;
+  });
+
   return (
     <div className="min-h-screen bg-[#1A1A1A] text-white">
       {/* Navigation */}
-      <nav className="bg-black border-b border-gray-800">
+      <nav className="bg-black border-b border-gray-800 sticky top-0 z-50 backdrop-blur-lg">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-2">
-              <Icon name="Skull" size={24} className="text-[#D32F2F]" />
+              <Icon
+                name="Skull"
+                size={24}
+                className="text-[#D32F2F] animate-pulse-glow"
+              />
               <span className="text-xl font-bold font-oswald text-white">
                 DEAD INSIDE GAMING
               </span>
@@ -76,56 +103,102 @@ const Index = () => {
             <div className="hidden md:flex space-x-8">
               <Button
                 variant="ghost"
-                className="text-white hover:text-[#D32F2F]"
+                className="text-white hover:text-[#D32F2F] transition-all duration-300 hover:scale-105"
               >
                 Главная
               </Button>
               <Button
                 variant="ghost"
-                className="text-white hover:text-[#D32F2F]"
+                className="text-white hover:text-[#D32F2F] transition-all duration-300 hover:scale-105"
               >
                 Каталог игр
               </Button>
               <Button
                 variant="ghost"
-                className="text-white hover:text-[#D32F2F]"
+                className="text-white hover:text-[#D32F2F] transition-all duration-300 hover:scale-105"
               >
                 Обзоры
               </Button>
               <Button
                 variant="ghost"
-                className="text-white hover:text-[#D32F2F]"
+                className="text-white hover:text-[#D32F2F] transition-all duration-300 hover:scale-105"
               >
                 Сообщество
               </Button>
             </div>
-            <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white">
-              Войти
-            </Button>
+            <div className="flex items-center space-x-4">
+              <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white transition-all duration-300 hover:scale-105">
+                Войти
+              </Button>
+              <Sheet open={isMenuOpen} onOpenChange={setIsMenuOpen}>
+                <SheetTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="md:hidden text-white"
+                  >
+                    <Icon name="Menu" size={24} />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent
+                  side="right"
+                  className="bg-black border-gray-800 text-white"
+                >
+                  <div className="flex flex-col space-y-4 mt-8">
+                    <Button
+                      variant="ghost"
+                      className="text-white hover:text-[#D32F2F] justify-start"
+                    >
+                      Главная
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="text-white hover:text-[#D32F2F] justify-start"
+                    >
+                      Каталог игр
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="text-white hover:text-[#D32F2F] justify-start"
+                    >
+                      Обзоры
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      className="text-white hover:text-[#D32F2F] justify-start"
+                    >
+                      Сообщество
+                    </Button>
+                  </div>
+                </SheetContent>
+              </Sheet>
+            </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-black to-gray-900 py-24">
+      <section className="relative bg-gradient-to-r from-black to-gray-900 py-24 animate-fade-in">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-6xl font-bold font-oswald mb-6 text-white">
               DEAD INSIDE
-              <span className="block text-[#D32F2F]">GAMING</span>
+              <span className="block text-[#D32F2F] animate-pulse-glow">
+                GAMING
+              </span>
             </h1>
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Погружайтесь в мрачный мир игр, где каждый пиксель пропитан
               атмосферой
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white px-8 py-3 text-lg">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up">
+              <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white px-8 py-3 text-lg transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#D32F2F]/20">
                 <Icon name="Gamepad2" size={20} className="mr-2" />
                 Каталог игр
               </Button>
               <Button
                 variant="outline"
-                className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg"
+                className="border-white text-white hover:bg-white hover:text-black px-8 py-3 text-lg transition-all duration-300 hover:scale-105"
               >
                 <Icon name="Users" size={20} className="mr-2" />
                 Сообщество
@@ -138,27 +211,54 @@ const Index = () => {
       {/* Featured Games */}
       <section className="py-16 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between mb-12">
-            <h2 className="text-3xl font-bold text-white">Популярные игры</h2>
-            <Button
-              variant="outline"
-              className="border-[#D32F2F] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white"
-            >
-              Все игры
-            </Button>
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 mb-12">
+            <h2 className="text-3xl font-bold text-white animate-fade-in">
+              Популярные игры
+            </h2>
+            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+              <div className="flex gap-2">
+                <Input
+                  placeholder="Поиск игр..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="bg-black border-gray-700 text-white placeholder:text-gray-400 focus:border-[#D32F2F] transition-all duration-300"
+                />
+                <Select value={selectedGenre} onValueChange={setSelectedGenre}>
+                  <SelectTrigger className="bg-black border-gray-700 text-white">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="bg-black border-gray-700 text-white">
+                    <SelectItem value="all">Все жанры</SelectItem>
+                    <SelectItem value="horror">Horror</SelectItem>
+                    <SelectItem value="action">Action</SelectItem>
+                    <SelectItem value="rpg">RPG</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button
+                variant="outline"
+                className="border-[#D32F2F] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white transition-all duration-300"
+              >
+                Все игры
+              </Button>
+            </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredGames.map((game) => (
+            {filteredGames.map((game, index) => (
               <Card
                 key={game.id}
-                className="bg-black border-gray-800 hover:border-[#D32F2F] transition-colors"
+                className="bg-black border-gray-800 hover:border-[#D32F2F] transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#D32F2F]/20 group animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
               >
                 <CardHeader className="p-0">
-                  <img
-                    src={game.image}
-                    alt={game.title}
-                    className="w-full h-48 object-cover rounded-t-lg"
-                  />
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={game.image}
+                      alt={game.title}
+                      className="w-full h-48 object-cover rounded-t-lg transition-transform duration-300 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  </div>
                 </CardHeader>
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between mb-2">
@@ -179,7 +279,7 @@ const Index = () => {
                       </span>
                     </div>
                   </div>
-                  <CardTitle className="text-white mb-2">
+                  <CardTitle className="text-white mb-2 group-hover:text-[#D32F2F] transition-colors">
                     {game.title}
                   </CardTitle>
                   <CardDescription className="text-gray-400">
@@ -196,23 +296,28 @@ const Index = () => {
       <section className="py-16 bg-[#1A1A1A]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-12">
-            <h2 className="text-3xl font-bold text-white">Последние обзоры</h2>
+            <h2 className="text-3xl font-bold text-white animate-fade-in">
+              Последние обзоры
+            </h2>
             <Button
               variant="outline"
-              className="border-[#D32F2F] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white"
+              className="border-[#D32F2F] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white transition-all duration-300"
             >
               Все обзоры
             </Button>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {reviews.map((review) => (
+            {reviews.map((review, index) => (
               <Card
                 key={review.id}
-                className="bg-black border-gray-800 hover:border-[#D32F2F] transition-colors"
+                className="bg-black border-gray-800 hover:border-[#D32F2F] transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#D32F2F]/20 group animate-fade-in"
+                style={{ animationDelay: `${index * 0.2}s` }}
               >
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-white">{review.game}</CardTitle>
+                    <CardTitle className="text-white group-hover:text-[#D32F2F] transition-colors">
+                      {review.game}
+                    </CardTitle>
                     <div className="flex items-center space-x-1">
                       <Icon
                         name="Star"
@@ -234,7 +339,7 @@ const Index = () => {
                   <p className="text-gray-300 mb-4">{review.preview}</p>
                   <Button
                     variant="outline"
-                    className="border-[#D32F2F] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white"
+                    className="border-[#D32F2F] text-[#D32F2F] hover:bg-[#D32F2F] hover:text-white transition-all duration-300"
                   >
                     Читать полностью
                   </Button>
@@ -249,55 +354,57 @@ const Index = () => {
       <section className="py-16 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Сообщество</h2>
+            <h2 className="text-3xl font-bold text-white mb-4 animate-fade-in">
+              Сообщество
+            </h2>
             <p className="text-gray-300 max-w-2xl mx-auto">
               Присоединяйтесь к нашему мрачному сообществу геймеров и делитесь
               своими впечатлениями
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="bg-black border-gray-800 text-center">
-              <CardContent className="p-8">
-                <Icon
-                  name="Users"
-                  size={48}
-                  className="text-[#D32F2F] mx-auto mb-4"
-                />
-                <h3 className="text-xl font-bold text-white mb-2">Форум</h3>
-                <p className="text-gray-400 mb-4">Обсуждения игр и стратегии</p>
-                <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white">
-                  Перейти
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="bg-black border-gray-800 text-center">
-              <CardContent className="p-8">
-                <Icon
-                  name="Trophy"
-                  size={48}
-                  className="text-[#D32F2F] mx-auto mb-4"
-                />
-                <h3 className="text-xl font-bold text-white mb-2">Турниры</h3>
-                <p className="text-gray-400 mb-4">Соревнования и чемпионаты</p>
-                <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white">
-                  Участвовать
-                </Button>
-              </CardContent>
-            </Card>
-            <Card className="bg-black border-gray-800 text-center">
-              <CardContent className="p-8">
-                <Icon
-                  name="MessageCircle"
-                  size={48}
-                  className="text-[#D32F2F] mx-auto mb-4"
-                />
-                <h3 className="text-xl font-bold text-white mb-2">Чат</h3>
-                <p className="text-gray-400 mb-4">Общение в реальном времени</p>
-                <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white">
-                  Войти
-                </Button>
-              </CardContent>
-            </Card>
+            {[
+              {
+                icon: "Users",
+                title: "Форум",
+                desc: "Обсуждения игр и стратегии",
+              },
+              {
+                icon: "Trophy",
+                title: "Турниры",
+                desc: "Соревнования и чемпионаты",
+              },
+              {
+                icon: "MessageCircle",
+                title: "Чат",
+                desc: "Общение в реальном времени",
+              },
+            ].map((item, index) => (
+              <Card
+                key={index}
+                className="bg-black border-gray-800 text-center hover:border-[#D32F2F] transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-[#D32F2F]/20 group animate-scale-in"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <CardContent className="p-8">
+                  <Icon
+                    name={item.icon as any}
+                    size={48}
+                    className="text-[#D32F2F] mx-auto mb-4 transition-transform duration-300 group-hover:scale-110"
+                  />
+                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-[#D32F2F] transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-400 mb-4">{item.desc}</p>
+                  <Button className="bg-[#D32F2F] hover:bg-[#B71C1C] text-white transition-all duration-300 hover:scale-105">
+                    {index === 0
+                      ? "Перейти"
+                      : index === 1
+                        ? "Участвовать"
+                        : "Войти"}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>
@@ -321,22 +428,34 @@ const Index = () => {
               <h4 className="text-white font-semibold mb-4">Разделы</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Каталог игр
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Обзоры
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Новости
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Гайды
                   </a>
                 </li>
@@ -346,22 +465,34 @@ const Index = () => {
               <h4 className="text-white font-semibold mb-4">Сообщество</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Форум
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Discord
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Турниры
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Рейтинги
                   </a>
                 </li>
@@ -371,17 +502,26 @@ const Index = () => {
               <h4 className="text-white font-semibold mb-4">Связь</h4>
               <ul className="space-y-2 text-gray-400">
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Контакты
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Реклама
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-[#D32F2F]">
+                  <a
+                    href="#"
+                    className="hover:text-[#D32F2F] transition-colors"
+                  >
                     Поддержка
                   </a>
                 </li>
